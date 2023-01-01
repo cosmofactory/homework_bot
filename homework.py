@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 import logging
 import requests
@@ -22,6 +23,17 @@ logging.basicConfig(
 PRACTICUM_TOKEN = os.getenv('PRACTICUM_TOKEN')
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
+=======
+...
+
+load_dotenv()
+
+
+PRACTICUM_TOKEN = ...
+TELEGRAM_TOKEN = ...
+TELEGRAM_CHAT_ID = ...
+
+>>>>>>> 589e95bb1e911131f5a99bd95dbd398d65b5bbdf
 RETRY_PERIOD = 600
 ENDPOINT = 'https://practicum.yandex.ru/api/user_api/homework_statuses/'
 HEADERS = {'Authorization': f'OAuth {PRACTICUM_TOKEN}'}
@@ -35,6 +47,7 @@ HOMEWORK_VERDICTS = {
 
 
 def check_tokens():
+<<<<<<< HEAD
     """Checking if tokens exist in env."""
     list_of_tokens = (
         PRACTICUM_TOKEN,
@@ -99,10 +112,31 @@ def parse_status(homework):
         raise MissingHomeworkName
     homework_name = homework['homework_name']
     verdict = HOMEWORK_VERDICTS[homework['status']]
+=======
+    ...
+
+
+def send_message(bot, message):
+    ...
+
+
+def get_api_answer(timestamp):
+    ...
+
+
+def check_response(response):
+    ...
+
+
+def parse_status(homework):
+    ...
+
+>>>>>>> 589e95bb1e911131f5a99bd95dbd398d65b5bbdf
     return f'Изменился статус проверки работы "{homework_name}". {verdict}'
 
 
 def main():
+<<<<<<< HEAD
     """Main function of the bot."""
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     timestamp = int(time.time())
@@ -126,6 +160,26 @@ def main():
             logging.error(error, exc_info=True)
         finally:
             time.sleep(RETRY_PERIOD)
+=======
+    """Основная логика работы бота."""
+
+    ...
+
+    bot = telegram.Bot(token=TELEGRAM_TOKEN)
+    timestamp = int(time.time())
+
+    ...
+
+    while True:
+        try:
+
+            ...
+
+        except Exception as error:
+            message = f'Сбой в работе программы: {error}'
+            ...
+        ...
+>>>>>>> 589e95bb1e911131f5a99bd95dbd398d65b5bbdf
 
 
 if __name__ == '__main__':
