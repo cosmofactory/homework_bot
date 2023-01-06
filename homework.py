@@ -3,8 +3,9 @@ import logging
 import requests
 import time
 import telegram
+import sys
 from dotenv import load_dotenv
-from exceptions import NoTokenProvidedException, NoHomeworksFromAPI
+from exceptions import NoHomeworksFromAPI
 from exceptions import HTTPStatusNotOk, RequestException
 from exceptions import WrongStatusException, MissingHomeworkName
 from exceptions import CantSendMessageException
@@ -36,19 +37,16 @@ HOMEWORK_VERDICTS = {
 
 def check_tokens():
     """Checking if tokens exist in env."""
-    list_of_tokens = (
+    return all([
         PRACTICUM_TOKEN,
         TELEGRAM_TOKEN,
         TELEGRAM_CHAT_ID
-    )
-    for i in list_of_tokens:  # checking if all the tokens are here
-        if i is None:
-            logging.critical('Нет токена.')
-            raise NoTokenProvidedException
+    ])
 
 
 def send_message(bot, message):
     """Sends megssage with information from main function."""
+    logging.debug('Начинаем отправлять сообщение.')
     try:
         bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
         logging.debug('Сообщение успешно отправлено.')
@@ -91,7 +89,9 @@ def check_response(response):
 
 def parse_status(homework):
     """Parses the information from Yandex.
-    to check the result of the homework
+
+    Checks status of the homework and returns the
+    verdict of it.
     """
     if homework['status'] not in HOMEWORK_VERDICTS:
         raise WrongStatusException
@@ -106,7 +106,8 @@ def main():
     """Main function of the bot."""
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     timestamp = int(time.time())
-    check_tokens()
+    if not check_tokens():
+        sys.exit(logging.critical('Отсутствует токен.'))
     message_old = ''
     while True:
         try:
